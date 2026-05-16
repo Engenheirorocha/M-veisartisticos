@@ -79,23 +79,27 @@ h2 { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: 500; color: #
 p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 .section-desc { max-width: 750px; margin-bottom: 50px; }
 
-/* RECURSOS VISUAIS DE IMAGEM IMITANDO CURVAS */
+/* 🛠️ MOLDURA PROPORCIONAL COM ASPECT-RATIO (CORRIGIDO PARA RETIRAR O SUPER ZOOM) */
 .image-showcase {
-    width: 100%; max-width: 850px; height: 480px; overflow: hidden;
+    width: 100%; 
+    max-width: 850px; 
+    height: auto; 
+    aspect-ratio: 4 / 3; 
+    overflow: hidden;
     border: 1px solid rgba(197, 168, 128, 0.3);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.8); margin-top: 40px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8); 
+    margin-top: 40px;
 }
 
 .img-banco { border-radius: 40px 140px 40px 140px; }
 .img-mesa { border-radius: 140px 40px 140px 40px; }
 .img-painel { border-radius: 40px 40px 140px 140px; }
 
-/* 🛠️ IMPLEMENTADO: ENQUADRAMENTO ATUALIZADO PARA 65% VERTICAL */
 .display-img { 
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
-    object-position: center 65%; /* Reajusta a imagem trazendo o plano de fundo mais para baixo */
+    object-position: center center; 
     transition: transform 1.2s ease; 
 }
 .image-showcase:hover .display-img { transform: scale(1.05); }
@@ -159,7 +163,7 @@ p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 @media (max-width: 968px) {
     h1 { font-size: 2.6rem; }
     h2 { font-size: 2rem; }
-    .image-showcase { height: 300px; margin-top: 30px; }
+    .image-showcase { height: auto; aspect-ratio: 4 / 3; margin-top: 30px; }
     .features-grid, .process-steps { grid-template-columns: 1fr; gap: 30px; }
     .btn-primary { width: 100%; max-width: 350px; }
     .contact-footer { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
