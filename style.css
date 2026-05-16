@@ -79,30 +79,33 @@ h2 { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: 500; color: #
 p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 .section-desc { max-width: 750px; margin-bottom: 50px; }
 
-/* 🛠️ MOLDURA PROPORCIONAL COM ASPECT-RATIO (CORRIGIDO PARA RETIRAR O SUPER ZOOM) */
+/* RECURSOS VISUAIS DE IMAGEM IMITANDO CURVAS */
 .image-showcase {
     width: 100%; 
     max-width: 850px; 
-    height: auto; 
-    aspect-ratio: 4 / 3; 
+    height: 480px; 
     overflow: hidden;
     border: 1px solid rgba(197, 168, 128, 0.3);
     box-shadow: 0 25px 60px rgba(0,0,0,0.8); 
     margin-top: 40px;
+    background-color: #0b0b0c; /* Garante fundo preto luxuoso nas laterais se sobrar espaço */
 }
 
 .img-banco { border-radius: 40px 140px 40px 140px; }
 .img-mesa { border-radius: 140px 40px 140px 40px; }
 .img-painel { border-radius: 40px 40px 140px 140px; }
 
+/* 🛠️ IMPLEMENTADO: REMOÇÃO DO ZOOM COM LARGURA AUTOMÁTICA E EMBUTIMENTO TOTAL (CONTAIN) */
 .display-img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    object-position: center center; 
+    width: auto;         /* Retira os 100% que causavam o esticamento e zoom lateral */
+    height: 100%;        /* Ajusta perfeitamente na altura vertical da moldura */
+    max-width: 100%;     /* Respeita os limites da caixa */
+    object-fit: contain;   /* Garante que o banco e o cenário apareçam inteiros sem cortes */
+    display: block;
+    margin: 0 auto;      /* Centraliza a imagem horizontalmente dentro da moldura */
     transition: transform 1.2s ease; 
 }
-.image-showcase:hover .display-img { transform: scale(1.05); }
+.image-showcase:hover .display-img { transform: scale(1.03); }
 
 /* GRADES TÉCNICAS */
 .features-grid {
@@ -163,7 +166,8 @@ p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 @media (max-width: 968px) {
     h1 { font-size: 2.6rem; }
     h2 { font-size: 2rem; }
-    .image-showcase { height: auto; aspect-ratio: 4 / 3; margin-top: 30px; }
+    .image-showcase { height: 320px; margin-top: 30px; }
+    .display-img { width: auto; height: 100%; max-width: 100%; }
     .features-grid, .process-steps { grid-template-columns: 1fr; gap: 30px; }
     .btn-primary { width: 100%; max-width: 350px; }
     .contact-footer { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
