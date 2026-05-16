@@ -1,4 +1,3 @@
-
 /* RESET E ANIMAÇÕES GLOBAIS */
 * {
     margin: 0;
@@ -80,7 +79,7 @@ h2 { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: 500; color: #
 p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 .section-desc { max-width: 750px; margin-bottom: 50px; }
 
-/* RECURSOS VIZUAIS DE IMAGEM IMITANDO CURVAS */
+/* RECURSOS VISUAIS DE IMAGEM IMITANDO CURVAS */
 .image-showcase {
     width: 100%; max-width: 850px; height: 480px; overflow: hidden;
     border: 1px solid rgba(197, 168, 128, 0.3);
@@ -91,7 +90,13 @@ p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 .img-mesa { border-radius: 140px 40px 140px 40px; }
 .img-painel { border-radius: 40px 40px 140px 140px; }
 
-.display-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease; }
+.display-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center bottom; /* AJUSTE REALIZADO: Foca a foto na base para mostrar o banco inteiro */
+    transition: transform 1.2s ease; 
+}
 .image-showcase:hover .display-img { transform: scale(1.05); }
 
 /* GRADES TÉCNICAS */
