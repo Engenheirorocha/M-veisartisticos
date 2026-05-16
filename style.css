@@ -90,12 +90,12 @@ p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
 .img-mesa { border-radius: 140px 40px 140px 40px; }
 .img-painel { border-radius: 40px 40px 140px 140px; }
 
-/* 🛠️ IMPLEMENTADO: ENQUADRAMENTO PERFEITO COM EM-TELA CHEIA (COVER) E REPOSICIONAMENTO VERTICAL */
+/* 🛠️ IMPLEMENTADO: ENQUADRAMENTO ATUALIZADO PARA 65% VERTICAL */
 .display-img { 
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
-    object-position: center 85%; 
+    object-position: center 65%; /* Reajusta a imagem trazendo o plano de fundo mais para baixo */
     transition: transform 1.2s ease; 
 }
 .image-showcase:hover .display-img { transform: scale(1.05); }
@@ -166,4 +166,3 @@ p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
     .contact-item { text-align: center; }
     .whatsapp-floating { bottom: 20px; right: 20px; width: 55px; height: 55px; }
 }
-
