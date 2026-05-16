@@ -84,21 +84,22 @@ p { font-size: 1.2rem; line-height: 1.8; color: #a0a0a5; font-weight: 200; }
     width: 100%; max-width: 850px; height: 480px; overflow: hidden;
     border: 1px solid rgba(197, 168, 128, 0.3);
     box-shadow: 0 25px 60px rgba(0,0,0,0.8); margin-top: 40px;
+    background-color: #0b0b0c; /* Garante fundo preto caso a imagem reduza */
 }
 
 .img-banco { border-radius: 40px 140px 40px 140px; }
 .img-mesa { border-radius: 140px 40px 140px 40px; }
 .img-painel { border-radius: 40px 40px 140px 140px; }
 
-/* 🛠️ ENQUADRAMENTO PERFEITO DO BANCO CORRIGIDO ABAIXO */
+/* 🛠️ AJUSTE DE ZOOM: MUDANÇA PARA CONTER A IMAGEM INTEIRA SEM CORTES */
 .display-img { 
     width: 100%; 
     height: 100%; 
-    object-fit: cover; 
-    object-position: center 72%; /* Move a foto verticalmente para centralizar o banco sem dar zoom nas laterais */
+    object-fit: contain; /* Força a foto a reduzir e caber inteira na moldura */
+    object-position: center center; 
     transition: transform 1.2s ease; 
 }
-.image-showcase:hover .display-img { transform: scale(1.05); }
+.image-showcase:hover .display-img { transform: scale(1.03); }
 
 /* GRADES TÉCNICAS */
 .features-grid {
