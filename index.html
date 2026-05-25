@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PromptFLOW V4.2 - Interface Limpa</title>
+<title>PromptFLOW V4.3 - Interface Limpa</title>
 
 <style>
 *{box-sizing:border-box}
@@ -105,7 +105,7 @@ input,textarea,select{
 
 textarea{
   resize:vertical;
-  min-height:92px;
+  min-height:110px;
 }
 
 input:focus,textarea:focus,select:focus{
@@ -177,11 +177,6 @@ input:focus,textarea:focus,select:focus{
 
 .model:hover{
   border-color:#ff8c22;
-}
-
-.model.active{
-  border-color:#ff8c22;
-  box-shadow:0 0 0 3px rgba(255,140,34,.09);
 }
 
 .model-top{
@@ -284,26 +279,6 @@ button.main:hover,button.secondary:hover,button.danger:hover{
   filter:brightness(1.08);
 }
 
-.status{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-  margin-top:12px;
-}
-
-.chip{
-  background:#0b0b0b;
-  border:1px solid #292929;
-  border-radius:14px;
-  padding:9px 10px;
-  color:#cfcfcf;
-  font-size:12px;
-}
-
-.chip strong{
-  color:#ff9b35;
-}
-
 .result-box{
   background:#050505;
   border:1px solid #292929;
@@ -374,7 +349,6 @@ button.main:hover,button.secondary:hover,button.danger:hover{
 
 @media(max-width:950px){
   .grid{grid-template-columns:1fr}
-  .status{grid-template-columns:1fr 1fr}
   h1{font-size:25px}
   .result-box{min-height:420px}
 }
@@ -382,7 +356,6 @@ button.main:hover,button.secondary:hover,button.danger:hover{
 @media(max-width:520px){
   .two-cols{grid-template-columns:1fr}
   .preview-grid{grid-template-columns:repeat(2,1fr)}
-  .status{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -392,10 +365,10 @@ button.main:hover,button.secondary:hover,button.danger:hover{
 <div class="app">
 
   <div class="header">
-    <div class="badge">PROMPTFLOW V4.2 · INTERFACE LIMPA</div>
+    <div class="badge">PROMPTFLOW V4.3 · INTERFACE LIMPA</div>
     <h1>Gerador de Campanhas Criativas para Flow</h1>
     <div class="subtitle">
-      Envie imagens, informe nome e descrição do produto, escolha categoria e duração. Depois selecione manualmente quantos prompts quer em cada modelo criativo.
+      Envie imagens, informe nome e descrição do produto, escolha apenas a categoria e a duração. Depois selecione manualmente quantos prompts quer em cada modelo criativo.
     </div>
   </div>
 
@@ -403,23 +376,23 @@ button.main:hover,button.secondary:hover,button.danger:hover{
 
     <div class="card">
 
-      <div class="section-title">1. Dados do Produto</div>
+      <div class="section-title">1. Produto</div>
 
       <div class="upload-box">
         <input type="file" id="imageUpload" accept="image/*" multiple />
         <div class="help">
-          Envie até 10 imagens de referência. O app usa imagem, nome do arquivo, título e descrição para reforçar fidelidade do produto.
+          Envie até 10 imagens de referência do produto.
         </div>
         <div class="preview-grid" id="previewGrid">
           <div class="preview-item">Sem imagem</div>
         </div>
       </div>
 
-      <label>Nome do produto obrigatório</label>
+      <label>Nome do produto</label>
       <input id="productTitle" placeholder="Digite o nome exato do produto" />
 
       <label>Descrição do produto</label>
-      <textarea id="productDescription" placeholder="Digite características, medidas, material, uso, cor, acabamento e detalhes do produto"></textarea>
+      <textarea id="productDescription" placeholder="Digite aqui a descrição completa do produto: cor, material, acabamento, detalhes, uso, medidas e características importantes."></textarea>
 
       <div class="two-cols">
         <div>
@@ -439,7 +412,7 @@ button.main:hover,button.secondary:hover,button.danger:hover{
         </div>
 
         <div>
-          <label>Duração por vídeo</label>
+          <label>Duração</label>
           <select id="duration">
             <option value="7s">7 segundos</option>
             <option value="8s">8 segundos</option>
@@ -449,16 +422,9 @@ button.main:hover,button.secondary:hover,button.danger:hover{
         </div>
       </div>
 
-      <div class="status" id="detected">
-        <div class="chip"><strong>Categoria:</strong> aguardando</div>
-        <div class="chip"><strong>Produto:</strong> aguardando</div>
-        <div class="chip"><strong>Demonstração:</strong> aguardando</div>
-        <div class="chip"><strong>Ambiente:</strong> aguardando</div>
-      </div>
-
-      <div class="sub-title">2. Escolha manualmente os modelos criativos</div>
+      <div class="sub-title">2. Modelos Criativos</div>
       <div class="help">
-        Use + e - para definir quantos prompts deseja em cada modelo. Nada é selecionado automaticamente.
+        Escolha manualmente quantos prompts quer em cada modelo usando + e -.
       </div>
 
       <div class="model-list" id="modelList"></div>
@@ -474,7 +440,7 @@ button.main:hover,button.secondary:hover,button.danger:hover{
 
       <div class="toolbar">
         <div>
-          <div class="section-title" style="margin-bottom:4px;">3. Prompt Final / Pacote de Campanha</div>
+          <div class="section-title" style="margin-bottom:4px;">3. Pacote de Prompts</div>
           <div class="count-total" id="totalCounter">Total selecionado: 0 vídeos</div>
         </div>
 
@@ -504,7 +470,6 @@ Preencha o nome do produto, escolha os modelos criativos com + e clique em GERAR
 
 <script>
 let uploadedFileNames = [];
-let selectedModelForSingle = "ugc";
 
 const creativeModels = [
   { id:"ugc", name:"UGC Pessoa Mostrando", desc:"Pessoa real mostrando o produto como descoberta natural.", scenes:4 },
@@ -705,16 +670,14 @@ function renderModels(){
   creativeModels.forEach(model => {
     const div = document.createElement("div");
     div.className = "model";
-    div.id = "model-card-" + model.id;
-    div.onclick = () => selectSingleModel(model.id);
 
     div.innerHTML = `
       <div class="model-top">
         <div class="model-info">
           <div class="model-name">${model.name}</div>
-          <div class="model-desc">${model.desc} · ${model.scenes} cenas · adaptável por categoria</div>
+          <div class="model-desc">${model.desc} · ${model.scenes} cenas</div>
         </div>
-        <div class="counter" onclick="event.stopPropagation()">
+        <div class="counter">
           <button onclick="changeCount('${model.id}', -1)">−</button>
           <span id="count-${model.id}">${counts[model.id]}</span>
           <button onclick="changeCount('${model.id}', 1)">+</button>
@@ -725,20 +688,7 @@ function renderModels(){
     modelList.appendChild(div);
   });
 
-  selectSingleModel(selectedModelForSingle);
   updateTotal();
-}
-
-function selectSingleModel(id){
-  selectedModelForSingle = id;
-
-  creativeModels.forEach(m => {
-    const el = document.getElementById("model-card-" + m.id);
-    if(el) el.classList.remove("active");
-  });
-
-  const active = document.getElementById("model-card-" + id);
-  if(active) active.classList.add("active");
 }
 
 function changeCount(id, delta){
@@ -776,8 +726,6 @@ document.getElementById("imageUpload").addEventListener("change", function(e){
     };
     reader.readAsDataURL(file);
   });
-
-  autoDetect();
 });
 
 function normalizeText(text){
@@ -823,17 +771,28 @@ function detectCategory(full){
   return "generic";
 }
 
-function extractProductHints(full, categoryId){
-  let productType = (categoryProfiles[categoryId] || categoryProfiles.generic).productType;
+function getCategoryProfile(){
+  const manualCategory = document.getElementById("manualCategory").value;
+  const title = document.getElementById("productTitle").value.trim();
+  const description = document.getElementById("productDescription").value.trim();
+  const full = normalizeText(title + " " + description + " " + uploadedFileNames.join(" "));
+
+  const categoryId = manualCategory === "auto" ? detectCategory(full) : manualCategory;
+
+  return {
+    id: categoryId,
+    ...categoryProfiles[categoryId]
+  };
+}
+
+function extractHints(text){
+  const full = normalizeText(text);
+
   let color = "cor conforme imagem e descrição";
   let material = "material conforme imagem e descrição";
   let finish = "acabamento conforme imagem e descrição";
 
-  const colors = [
-    "preta","preto","branca","branco","azul","vermelha","vermelho","verde",
-    "rosa","cinza","bege","marrom","inox","dourado","prata","madeira"
-  ];
-
+  const colors = ["preta","preto","branca","branco","azul","vermelha","vermelho","verde","rosa","cinza","bege","marrom","inox","dourado","prata","madeira"];
   colors.forEach(c => {
     if(full.includes(c)) color = c;
   });
@@ -851,104 +810,35 @@ function extractProductHints(full, categoryId){
   if(full.includes("acolchoado") || full.includes("acolchoada")) finish = "acabamento acolchoado";
   if(full.includes("texturizado") || full.includes("texturizada")) finish = "acabamento texturizado";
 
-  if(categoryId === "fashion"){
-    if(full.includes("jaqueta") || full.includes("casaco") || full.includes("bobojaco") || full.includes("puffer")){
-      productType = "jaqueta ou casaco";
-    }
-
-    if(full.includes("camiseta") || full.includes("camisa")){
-      productType = "camisa ou camiseta";
-    }
-
-    if(full.includes("calca") || full.includes("calça")){
-      productType = "calça";
-    }
-
-    if(full.includes("tenis") || full.includes("tênis") || full.includes("sapato") || full.includes("sandalia") || full.includes("sandália")){
-      productType = "calçado";
-    }
-  }
-
-  if(categoryId === "electronics"){
-    if(full.includes("fone")){
-      productType = "fone de ouvido";
-    }
-
-    if(full.includes("bluetooth") || full.includes("radio") || full.includes("rádio") || full.includes("caixa de som")){
-      productType = "rádio, caixa de som ou eletrônico bluetooth";
-    }
-  }
-
-  if(categoryId === "home"){
-    if(full.includes("prateleira") || full.includes("nicho")){
-      productType = "prateleira decorativa";
-    }
-
-    if(full.includes("porta chave") || full.includes("porta-chave")){
-      productType = "porta-chaves de parede";
-    }
-
-    if(full.includes("peso de porta")){
-      productType = "peso de porta decorativo";
-    }
-  }
-
-  return {productType, color, material, finish};
+  return { color, material, finish };
 }
-
-function autoDetect(){
-  const title = document.getElementById("productTitle").value.trim();
-  const desc = document.getElementById("productDescription").value.trim();
-  const manualCategory = document.getElementById("manualCategory").value;
-
-  const full = normalizeText(title + " " + desc + " " + uploadedFileNames.join(" "));
-
-  const detectedCategory = detectCategory(full);
-  const categoryId = manualCategory === "auto" ? detectedCategory : manualCategory;
-  const profile = categoryProfiles[categoryId] || categoryProfiles.generic;
-  const hints = extractProductHints(full, categoryId);
-
-  document.getElementById("detected").innerHTML = `
-    <div class="chip"><strong>Categoria:</strong> ${profile.label}</div>
-    <div class="chip"><strong>Produto:</strong> ${hints.productType}</div>
-    <div class="chip"><strong>Demonstração:</strong> ${profile.demo}</div>
-    <div class="chip"><strong>Ambiente:</strong> ${profile.scene}</div>
-  `;
-
-  return { categoryId, profile, ...hints };
-}
-
-["productTitle","productDescription","manualCategory"].forEach(id=>{
-  document.getElementById(id).addEventListener("input", autoDetect);
-  document.getElementById(id).addEventListener("change", autoDetect);
-});
 
 function getProductData(){
-  const title = document.getElementById("productTitle").value.trim();
+  const productName = document.getElementById("productTitle").value.trim();
   const description = document.getElementById("productDescription").value.trim();
   const duration = document.getElementById("duration").value;
 
-  if(!title){
+  if(!productName){
     showMessage("Digite o nome do produto.");
     document.getElementById("result").textContent = "ERRO: o nome do produto é obrigatório.";
     return null;
   }
 
-  const detected = autoDetect();
-  const profile = detected.profile;
-  const safeDescription = description || "produto físico de e-commerce com características conforme imagem";
+  const profile = getCategoryProfile();
+  const hints = extractHints(productName + " " + description + " " + uploadedFileNames.join(" "));
 
-  const productLine = `${title}, categoria ${profile.label}, ${detected.productType}, cor: ${detected.color}, material: ${detected.material}, acabamento/detalhes: ${detected.finish}, descrição: ${safeDescription}`;
+  const finalDescription = description || "produto físico de e-commerce com características conforme imagem e título";
+
+  const productLine = `${productName}, categoria ${profile.label}, ${profile.productType}, ${hints.color}, ${hints.material}, ${hints.finish}, descrição: ${finalDescription}`;
 
   const refImages = uploadedFileNames.length
     ? uploadedFileNames.map((n,i)=>`Imagem de referência ${i+1}: ${n}`).join("; ")
     : "Nenhuma imagem enviada; usar título e descrição como referência principal.";
 
   return {
-    productName:title,
-    description:safeDescription,
+    productName,
+    description: finalDescription,
     duration,
-    detected,
     profile,
     productLine,
     refImages
@@ -958,15 +848,15 @@ function getProductData(){
 function commonNegative(data){
   let base = "beauty filter, skin smoothing, studio lighting, cinematic lighting, cellphone interface elements, recording UI, battery icon, signal icon, notification icons, app overlays, TikTok interface, readable private customer data, product redesign, product modification, invented features, extra parts, wrong color, wrong material, wrong quantity, unrealistic hands, distorted product, fake labels, professional studio background, luxury showroom, cartoon style";
 
-  if(data.detected.categoryId === "fashion"){
+  if(data.profile.id === "fashion"){
     base += ", changing clothing type, wrong garment, extra sleeves, missing zipper, wrong hood, unrealistic fabric, deformed body, exaggerated body shape, sexualized pose, turning clothing into home decor";
   }
 
-  if(data.detected.categoryId === "electronics"){
+  if(data.profile.id === "electronics"){
     base += ", wrong device, fake screen interface, invented buttons, extra cables, unrealistic glowing effects, changing device category";
   }
 
-  if(data.detected.categoryId === "home"){
+  if(data.profile.id === "home"){
     base += ", model wearing the decor product, changing decor product into clothing, floating shelf without support, unrealistic wall, impossible installation";
   }
 
@@ -997,67 +887,45 @@ function makePrompt(modelId, data, globalIndex, occurrence){
   const model = creativeModels.find(m => m.id === modelId) || creativeModels[0];
   const variation = getVariation(modelId, occurrence);
 
-  const name = data.productName;
-  const profile = data.profile;
-  const line = data.productLine;
-  const duration = data.duration;
-  const negative = commonNegative(data);
-
   const hook = fillText(variation.hook, data);
   const scene2 = fillText(variation.scene2, data);
   const scene3 = fillText(variation.scene3, data);
   const cta = fillText(variation.cta, data);
-  const angle = variation.angle;
 
-  const baseHeader = `━━━━ PROMPT ${globalIndex} — ${model.name.toUpperCase()} · VARIAÇÃO ${occurrence}: ${angle.toUpperCase()} ━━━━`;
-
-  let sceneLabel2 = "Desenvolvimento";
-  let sceneLabel3 = "Demonstração";
-
-  if(modelId === "comparacao") sceneLabel2 = "Comparação";
-  if(modelId === "povFabrica") sceneLabel2 = "Bastidor";
-  if(modelId === "premium") sceneLabel3 = "Close Premium";
-  if(modelId === "problemaSolucao") sceneLabel2 = "Problema";
-  if(modelId === "demoRapida") sceneLabel3 = "Uso / Teste";
-  if(modelId === "antesDepois") sceneLabel2 = "Antes";
-
-  let subject = profile.subject;
-  let scene = profile.scene;
-  let camera = profile.camera;
-  let style = profile.style;
-  let demoAction = profile.demo;
+  let scene = data.profile.scene;
+  let subject = data.profile.subject;
 
   if(modelId === "povHands"){
-    subject = `somente mãos adultas brasileiras demonstrando o ${name}, sem mostrar rosto, movimentos naturais`;
+    subject = `somente mãos adultas brasileiras demonstrando o ${data.productName}, sem mostrar rosto, movimentos naturais`;
   }
 
   if(modelId === "povFabrica"){
-    scene = `bastidor brasileiro realista: bancada, estoque, mesa de conferência, embalagem ou pequena produção adequada para a categoria ${profile.label}`;
-    subject = `mãos de trabalhador brasileiro conferindo, separando e mostrando o ${name}`;
+    scene = `bastidor brasileiro realista: bancada, estoque, mesa de conferência, embalagem ou pequena produção adequada para a categoria ${data.profile.label}`;
+    subject = `mãos de trabalhador brasileiro conferindo, separando e mostrando o ${data.productName}`;
   }
 
   if(modelId === "loja"){
-    scene = `loja brasileira realista adequada à categoria ${profile.label}, ambiente popular, prateleiras, araras, balcão ou mesa de exposição ao fundo, iluminação simples`;
+    scene = `loja brasileira realista adequada à categoria ${data.profile.label}, ambiente popular, prateleiras, araras, balcão ou mesa de exposição ao fundo, iluminação simples`;
   }
 
   if(modelId === "bras"){
-    scene = `feira shop brasileira estilo Brás ou comércio popular adequado à categoria ${profile.label}, movimento natural ao fundo`;
+    scene = `feira shop brasileira estilo Brás ou comércio popular adequado à categoria ${data.profile.label}, movimento natural ao fundo`;
   }
 
   if(modelId === "embalando"){
-    scene = `mesa de embalagem de loja online brasileira, caixas simples, plástico bolha ou embalagem adequada ao ${name}, etiquetas sem dados legíveis`;
-    subject = `mãos embalando pedidos, conferindo o ${name} e mostrando o produto antes do envio`;
+    scene = `mesa de embalagem de loja online brasileira, caixas simples, plástico bolha ou embalagem adequada ao ${data.productName}, etiquetas sem dados legíveis`;
+    subject = `mãos embalando pedidos, conferindo o ${data.productName} e mostrando o produto antes do envio`;
   }
 
-  return `${baseHeader}
+  return `━━━━ PROMPT ${globalIndex} — ${model.name.toUpperCase()} · VARIAÇÃO ${occurrence}: ${variation.angle.toUpperCase()} ━━━━
 
 ━━━━ CENA 1 — Scroll Stop ━━━━
 ${hook}
 
-━━━━ CENA 2 — ${sceneLabel2} ━━━━
+━━━━ CENA 2 — Desenvolvimento ━━━━
 ${scene2}
 
-━━━━ CENA 3 — ${sceneLabel3} ━━━━
+━━━━ CENA 3 — Demonstração ━━━━
 ${scene3}
 
 ━━━━ CENA 4 — CTA · CTA ━━━━
@@ -1065,13 +933,13 @@ ${cta}
 
 [SCENE]: ${scene}.
 [SUBJECT]: ${subject}.
-[PRODUCT]: ${line}. A demonstração correta para essa categoria é: ${demoAction}. O ${name} deve aparecer fiel à imagem enviada e ocupar destaque visual no frame.
-[CAMERA]: ${camera}.
+[PRODUCT]: ${data.productLine}. A demonstração correta para essa categoria é: ${data.profile.demo}. O ${data.productName} deve aparecer fiel à imagem enviada e ocupar destaque visual no frame.
+[CAMERA]: ${data.profile.camera}.
 [LIGHTING]: luz natural realista misturada com iluminação interna comum, sem aparência de estúdio.
-[STYLE]: ${style}.
-[DURATION]: ${duration}
+[STYLE]: ${data.profile.style}.
+[DURATION]: ${data.duration}
 ${productLock(data)}
-[NEGATIVE PROMPT]: ${negative}.`;
+[NEGATIVE PROMPT]: ${commonNegative(data)}.`;
 }
 
 function generateCampaign(){
@@ -1082,7 +950,10 @@ function generateCampaign(){
 
   creativeModels.forEach(model => {
     for(let i=1;i<=counts[model.id];i++){
-      selected.push({ modelId:model.id, occurrence:i });
+      selected.push({
+        modelId:model.id,
+        occurrence:i
+      });
     }
   });
 
@@ -1091,16 +962,16 @@ function generateCampaign(){
     return;
   }
 
-  let output = `PROMPTFLOW V4.2 — PACOTE DE CAMPANHA COM INTERFACE LIMPA
+  let output = `PROMPTFLOW V4.3 — PACOTE DE CAMPANHA
 
 PRODUTO PRINCIPAL: ${data.productName}
-CATEGORIA DETECTADA: ${data.profile.label}
-DESCRIÇÃO: ${data.description}
+CATEGORIA: ${data.profile.label}
+DURAÇÃO: ${data.duration}
 TOTAL DE PROMPTS: ${selected.length}
 
 INSTRUÇÃO GERAL:
 Todos os prompts abaixo devem respeitar a categoria correta do produto.
-Se o produto for moda/vestuário, mostrar pessoa vestindo, calçando ou experimentando, com foco em tecido, caimento, zíper, capuz, costura, solado ou detalhes da peça.
+Se o produto for moda/vestuário, mostrar pessoa vestindo, calçando ou experimentando.
 Se o produto for casa/decoração, mostrar ambiente doméstico, organização, instalação ou uso no espaço.
 Se o produto for eletrônico, mostrar teste, função, tela, botão, cabo, conexão, som, luz ou funcionamento.
 Não trocar a categoria do produto.
@@ -1163,7 +1034,7 @@ function downloadTxt(){
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = safe + "-promptflow-v4-2.txt";
+  a.download = safe + "-promptflow-v4-3.txt";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1186,13 +1057,12 @@ function clearAll(){
   document.getElementById("result").textContent = "Preencha o nome do produto, escolha os modelos criativos com + e clique em GERAR CAMPANHA.";
 
   resetCounts(false);
-  autoDetect();
 
   showMessage("Tudo limpo.");
 }
 
 function saveHistory(title, content){
-  const history = JSON.parse(localStorage.getItem("promptflow_history_v42") || "[]");
+  const history = JSON.parse(localStorage.getItem("promptflow_history_v43") || "[]");
 
   history.unshift({
     title,
@@ -1200,14 +1070,14 @@ function saveHistory(title, content){
     content
   });
 
-  localStorage.setItem("promptflow_history_v42", JSON.stringify(history.slice(0,10)));
+  localStorage.setItem("promptflow_history_v43", JSON.stringify(history.slice(0,10)));
 
   renderHistory();
 }
 
 function renderHistory(){
   const list = document.getElementById("historyList");
-  const history = JSON.parse(localStorage.getItem("promptflow_history_v42") || "[]");
+  const history = JSON.parse(localStorage.getItem("promptflow_history_v43") || "[]");
 
   if(history.length === 0){
     list.textContent = "Nenhuma campanha salva ainda.";
@@ -1242,7 +1112,6 @@ window.addEventListener("load", ()=>{
   renderModels();
   renderHistory();
   resetCounts(false);
-  autoDetect();
 });
 </script>
 
